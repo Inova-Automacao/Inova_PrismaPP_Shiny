@@ -1,0 +1,62 @@
+Metadata-Version: 2.1
+Name: faicons
+Version: 0.2.2
+Summary: An interface to Font-Awesome for use in Shiny.
+Home-page: https://github.com/rstudio/py-faicons
+Author: Carson Sievert
+Author-email: carson@rstudio.com
+License: MIT
+Project-URL: Bug Tracker, https://github.com/rstudio/py-faicons/issues
+Project-URL: Source Code, https://github.com/rstudio/py-faicons
+Keywords: fontawesome
+Platform: any
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Text Processing :: Markup :: HTML
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: htmltools >=0.1.4.9002
+Provides-Extra: dev
+Requires-Dist: black >=23.1.0 ; extra == 'dev'
+Requires-Dist: wheel ; extra == 'dev'
+Requires-Dist: flake8 ==3.9.2 ; (python_version <= "3.7") and extra == 'dev'
+Requires-Dist: flake8 >=6.0.0 ; (python_version > "3.7") and extra == 'dev'
+Provides-Extra: test
+Requires-Dist: pytest >=6.2.4 ; extra == 'test'
+
+
+# Font Awesome for Shiny
+
+An interface to [Font-Awesome](https://fontawesome.com/) for use in Shiny for Python.
+
+This package currently uses Font-Awesome 6.2.0.
+
+## Installation
+
+```python
+pip install faicons
+```
+
+## Usage
+
+Use `icon_svg()` to get an `<svg>` representation of the icon.
+
+```python
+from faicons import icon_svg
+icon_svg("play")
+```
+
+Example usage in Shiny:
+
+```python
+from shiny import ui
+ui.input_action_button("btn", "Press me", icon=icon_svg("play")).show()
+```
+
+
