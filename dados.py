@@ -88,3 +88,15 @@ cnab_titulos = ["Selecionar",
     "222-CARTÃO DE CRÉDITO - RECEBÍVEIS DE CARTÃO D...",
     "223-CRÉDITO PIX VIA QRCODE"
 ]
+
+
+def obter_choices_cnab_recorrente(df):
+    cnab_counts = df['CNAB'].value_counts()
+
+    # Seleciona os 10 CNABs mais frequentes e suas quantidades
+    top_cnabs = cnab_counts.nlargest(10)
+
+    # Cria a lista de CNABs ordenados por quantidade de ocorrências
+    choices_cnab_recorrente = top_cnabs.index.tolist()
+
+    return choices_cnab_recorrente
