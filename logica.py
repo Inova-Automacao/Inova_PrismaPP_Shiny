@@ -352,3 +352,40 @@ def exibir_top_cnabs_ou_titular(df, selecionado):
         top_empresas['VALOR_TRANSACAO'] = top_empresas['VALOR_TRANSACAO'].astype(float).map('{:,.2f}'.format)
 
         return top_empresas[['NOME_TITULAR', 'VALOR_TRANSACAO', 'QUANTIDADE_TRANSACOES']]  # Retorne o DataFrame de top empresas
+    
+# Retorna um DataFrame com as transações filtradas por débito ou crédito, tipo de conta código CNAB e unidade gestora organizadas por valor de transação
+def filtrar_transacoes_por_natureza_tipo_conta_unidade_gestora(df, natureza_lancamento, tipo_conta, cnab, unidade_gestora):
+
+    contas_privadas = df['NOME_TITULAR'].unique()
+ 
+    if tipo_conta == "Transações com contas privadas":
+        df_filtrado = df[~df['NOME_PESSOA_OD'].isin(contas_privadas)]
+    elif tipo_conta == "Transações entre contas públicas":
+        df_filtrado = df[df['NOME_PESSOA_OD'].isin(contas_privadas)]
+    elif tipo_conta == "Aplicação":
+        df_filtrado = df[df['CNAB'] == 106]
+
+    if natureza_lancamento == 'Débito':
+        natureza_mapeada = 'D' 
+    else:
+        natureza_mapeada = 'C'
+
+    df_filtrado = df_filtrado[df_filtrado['NATUREZA_LANCAMENTO'] == natureza_mapeada]
+
+    if tipo_conta != "Aplicação":
+        df_filtrado = df_filtrado[df_filtrado['NOME_PESSOA_OD'] == unidade_gestora]
+
+    numero_cnab = cnab_numeros[cnab_titulos.index(cnab)]
+    
+    if numero_cnab != 0:
+        df_filtrado = df_filtrado[df_filtrado['CNAB'] == numero_cnab]
+
+    df_resultado = df_filtrado[['NOME_TITULAR', 'NOME_PESSOA_OD', 'CPF_CNPJ_OD', 'CNAB', 'VALOR_TRANSACAO', 'DATA_LANCAMENTO','NATUREZA_LANCAMENTO']]
+
+    df_resultado = df_resultado.sort_values(by='VALOR_TRANSACAO', ascending=False)
+
+    df_resultado['DATA_LANCAMENTO'] = pd.to_datetime(df_resultado['DATA_LANCAMENTO']).dt.strftime('%d/%m/%Y')
+
+    df_resultado['VALOR_TRANSACAO'] = df_resultado['VALOR_TRANSACAO'].astype(float).map('{:,.2f}'.format)
+
+    return df_resultado
