@@ -352,14 +352,17 @@ def exibir_top_cnabs_ou_titular(df, selecionado):
         top_empresas['VALOR_TRANSACAO'] = top_empresas['VALOR_TRANSACAO'].astype(float).map('{:,.2f}'.format)
 
         return top_empresas[['NOME_TITULAR', 'VALOR_TRANSACAO', 'QUANTIDADE_TRANSACOES']]  # Retorne o DataFrame de top empresas
-    
+
 # Retorna um DataFrame com as transações filtradas por débito ou crédito, tipo de conta código CNAB e unidade gestora organizadas por valor de transação
-def filtrar_transacoes_por_natureza_tipo_conta_unidade_gestora(df, natureza_lancamento, tipo_conta, cnab, unidade_gestora):
+def filtrar_transacoes_por_natureza_tipo_conta_unidade_gestora(df, natureza_lancamento, tipo_conta, cnab, unidade_gestora, **kwargs):
 
     contas_privadas = df['NOME_TITULAR'].unique()
  
     if tipo_conta == "Transações com contas privadas":
         df_filtrado = df[~df['NOME_PESSOA_OD'].isin(contas_privadas)]
+        if 'empresa' in kwargs:
+            df_filtrado = df_filtrado[df_filtrado['NOME_PESSOA_OD'].isin([kwargs['empresa']])]
+        
     elif tipo_conta == "Transações entre contas públicas":
         df_filtrado = df[df['NOME_PESSOA_OD'].isin(contas_privadas)]
     elif tipo_conta == "Aplicação":
